@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>?</title>
+  <style>
+    @font-face {
+      font-family: 'Wolgadeutsche';
+      src: url(./assets/wolgadeutsche-DFyGyEQC.ttf) format('truetype');
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      position: relative;
+
+      width: 100dvw;
+      height: 100dvh;
+
+      margin: 0;
+
+      background-color: #11110e;
+
+      font-family: sans-serif;
+    }
+
+    h1 {
+      color: #fff;
+      margin: 0;
+      font-size: 3rem;
+    }
+
+    main {
+      display: flex;
+
+      width: 100%;
+      height: 100%;
+
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      gap: 40px;
+
+      position: relative;
+      overflow: hidden;
+    }
+
+    .button-group {
+      display: flex;
+      align-items: end  ;
+      gap: 30px;
+    }
+
+    .btn {
+      padding: 10px;
+      border: none;
+      border-radius: 20px;
+      width: 100px;
+      cursor: pointer;
+    }
+
+    .btn-yes {
+      background-color: #ee94b8;
+      color: #fff;
+    }
+
+    .btn-no {
+      border: 1px solid grey;
+      z-index: 20;
+    }
+
+    .absolute {
+      position: absolute;
+    }
+
+    .hidden {
+      visibility: hidden;
+    }
+
+    .animation {
+      width: 400px;
+      height: 400px;
+    }
+
+    .heart {
+      width: 10px;
+      height: 10px;
+      position: fixed;
+      top: -1dvh;
+      transform: translateY(0);
+      animation: fall 3s linear forwards;
+    }
+
+    @keyframes fall {
+      from {
+        transform: translateY(0dvh) translateX(-10dvw); 
+      }
+      to {
+        transform: translateY(105dvh) translateX(10dvw); 
+      }
+    }
+
+    .wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 20px;
+    }
+
+    video, .wrapper {
+      position: absolute;
+    }
+
+    .wrapper {
+      z-index: 2;
+    }
+
+    .death {
+      width: 64px;
+      height: 64px;
+    }
+
+    .btn-no-original {
+      height: max-content;
+    }
+
+    .death-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .none {
+      display: none;
+    }
+
+    .overlay {
+      background-color: #000000;
+      animation-fill-mode: both;
+      animation-iteration-count: 1;
+      animation-duration: 400ms;
+      animation-timing-function: ease;
+      animation-name: overlayEnter;
+      position: fixed;
+      z-index: 2000;
+      text-size-adjust: 100%;
+      right: 0;
+      top: 0;
+      left: 0;
+      bottom: 0;
+    }
+
+    @keyframes overlayEnter {
+      0% {
+        opacity: 0;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    .overlay-content {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      height: 100%;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Wolgadeutsche';
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <video src="./assets/video-DGWzRIic.mov" playsinline muted autoplay loop></video>
+
+    <div class="wrapper">
+      <h1 id="title">Простишь меня?</h1>
+
+      <section id="button-group" class="button-group">
+        <div class="death-group">
+          <img class="death" src="./assets/death-1-6krZkVDR.gif" alt="">
+          <button id="btn-yes" class="btn btn-yes">да</button>
+        </div>
+        <button id="btn-no-original" class="btn btn-no">не-а</button>
+      </section>
+    </div>
+
+    <button id="btn-no-jumping" class="btn btn-no absolute hidden">не-а</button>
+
+    <div class="overlay none" id="overlay">
+      <div class="overlay-content">
+        <h1>Урааа!</h1>
+        <img src="./assets/death-2-CVa1jGVh.gif" alt="">
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const btnNoOriginal = document.querySelector('#btn-no-original')
+    const btnNoJumping = document.querySelector('#btn-no-jumping')
+
+    const btnNoJumpingRect = btnNoJumping.getBoundingClientRect()
+
+    const bodyHeight = document.body.offsetHeight - btnNoJumpingRect.height
+    const bodyWidth = document.body.offsetWidth - btnNoJumpingRect.width
+
+    const toPx = number => `${number}px`
+
+    const rand = max => Math.floor(Math.random() * max) + 1
+
+    const moveBtnNoJumping = () => {
+      btnNoJumping.style.top = toPx(Math.random() * bodyHeight)
+      btnNoJumping.style.left = toPx(Math.random() * bodyWidth)
+    }
+
+    btnNoOriginal.addEventListener('click', () => {
+      btnNoOriginal.classList.add('hidden')
+
+      moveBtnNoJumping()
+      btnNoJumping.classList.remove('hidden')
+    }, { once: true })
+
+    btnNoJumping.addEventListener('click', () => {
+      console.log('hello')
+
+      moveBtnNoJumping()
+    })
+
+    const btnYes = document.querySelector('#btn-yes')
+    const animation = document.querySelector('#animation')
+    const buttonGroup = document.querySelector('#button-group')
+    const title = document.querySelector('#title')
+
+    btnYes.addEventListener('click', () => {
+      document.querySelector('.overlay').classList.remove('none')
+    }, { once: true })
+  </script>
+</body>
+</html>
